@@ -23,12 +23,21 @@ router.post("/add", upload.single("picture"), async (req, res) => {
   const localTime = date.toLocaleTimeString();
 
   try {
-    const tower = new Tower({
-      title: title,
-      description,
-      picture: req.file.filename,
-      date: `le ${localeDate} à ${localTime}`,
-    });
+    let tower;
+    if (req.file) {
+      tower = new Tower({
+        title: title,
+        description,
+        picture: req.file.filename,
+        date: `le ${localeDate} à ${localTime}`,
+      });
+    } else {
+      tower = new Tower({
+        title: title,
+        description,
+        date: `le ${localeDate} à ${localTime}`,
+      });
+    }
 
     const newTower = await tower.save();
 

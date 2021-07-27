@@ -38,14 +38,25 @@ router.post("/add", upload.single("picture"), async (req, res) => {
   const localTime = date.toLocaleTimeString();
 
   try {
-    const tournament = new Tournament({
-      title: title,
-      categoryName: categoryName,
-      categoryId: categoryId,
-      description,
-      picture: req.file.filename,
-      date: `le ${localeDate} à ${localTime}`,
-    });
+    let tournament;
+    if (req.file) {
+      tournament = new Tournament({
+        title: title,
+        categoryName: categoryName,
+        categoryId: categoryId,
+        description,
+        picture: req.file.filename,
+        date: `le ${localeDate} à ${localTime}`,
+      });
+    } else {
+      tournament = new Tournament({
+        title: title,
+        categoryName: categoryName,
+        categoryId: categoryId,
+        description,
+        date: `le ${localeDate} à ${localTime}`,
+      });
+    }
 
     const newTournament = await tournament.save();
 

@@ -81,19 +81,30 @@ router.put("/update/:id", upload.single("picture"), async (req, res) => {
       fs.unlink(`./uploads/${tournamentToUpdate.picture}`, function (err) {
         if (err) throw new Error();
       });
-    }
 
-    await Tournament.updateOne(
-      { _id: id },
-      {
-        title: title,
-        categoryName: categoryName,
-        categoryId: categoryId,
-        picture: req.file.filename,
-        description: description,
-        date: `le ${localeDate} à ${localTime}`,
-      }
-    );
+      await Tournament.updateOne(
+        { _id: id },
+        {
+          title: title,
+          categoryName: categoryName,
+          categoryId: categoryId,
+          picture: req.file.filename,
+          description: description,
+          date: `le ${localeDate} à ${localTime}`,
+        }
+      );
+    } else {
+      await Tournament.updateOne(
+        { _id: id },
+        {
+          title: title,
+          categoryName: categoryName,
+          categoryId: categoryId,
+          description: description,
+          date: `le ${localeDate} à ${localTime}`,
+        }
+      );
+    }
 
     const tournament = await Tournament.findById(id);
 

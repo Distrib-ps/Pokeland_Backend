@@ -62,17 +62,26 @@ router.put("/update/:id", upload.single("picture"), async (req, res) => {
       fs.unlink(`./uploads/${towerToUpdate.picture}`, function (err) {
         if (err) throw new Error();
       });
-    }
 
-    await Tower.updateOne(
-      { _id: id },
-      {
-        title: title,
-        picture: req.file.filename,
-        description: description,
-        date: `le ${localeDate} à ${localTime}`,
-      }
-    );
+      await Tower.updateOne(
+        { _id: id },
+        {
+          title: title,
+          picture: req.file.filename,
+          description: description,
+          date: `le ${localeDate} à ${localTime}`,
+        }
+      );
+    } else {
+      await Tower.updateOne(
+        { _id: id },
+        {
+          title: title,
+          description: description,
+          date: `le ${localeDate} à ${localTime}`,
+        }
+      );
+    }
 
     const tower = await Tower.findById(id);
 

@@ -49,7 +49,7 @@ router.get("/tiers", async (req, res) => {
 });
 
 router.post("/add", async (req, res) => {
-  const { date, name } = req.body;
+  const { date, name, selectName } = req.body;
 
   try {
     checkInput(date, /^\d+-\d+$/);
@@ -58,6 +58,7 @@ router.post("/add", async (req, res) => {
     const newTier = new Tier({
       date: date,
       name: name,
+      selectName: selectName,
     });
 
     const tierSet = await newTier.save();
@@ -76,8 +77,12 @@ router.put("/update/:id", async (req, res) => {
   try {
     checkInput(date, /^\d+-\d+$/);
     checkInput(name, /^[a-z][a-z0-9]+-\d+$/g);
+    checkInput(selectName, /[a-zA-z0-9]+/g);
 
-    await Tier.updateOne({ _id: id }, { date: date, name: name });
+    await Tier.updateOne(
+      { _id: id },
+      { date: date, name: name, selectName: selectName }
+    );
 
     const tier = await Tier.findById(id);
 

@@ -30,6 +30,33 @@ router.get("/all", async (req, res) => {
   }
 });
 
+// nouvelle route pour pas de ficher
+router.post("/addNoFile", async (req, res) => {
+  const { title, categoryName, categoryId, description, picture } = req.body;
+
+  const date = new Date();
+  const localeDate = date.toLocaleDateString();
+  const localTime = date.toLocaleTimeString();
+
+  try {
+    const tournament = new Tournament({
+      title: title,
+      categoryName: categoryName,
+      categoryId: categoryId,
+      description,
+      picture: picture,
+      date: `le ${localeDate} à ${localTime}`,
+    });
+
+    const newTournament = await tournament.save();
+
+    res.json(newTournament);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+// route en fonction si fichier
 router.post("/add", upload.single("picture"), async (req, res) => {
   const { title, categoryName, categoryId, description } = req.body;
 
@@ -105,6 +132,37 @@ router.put("/update/:id", upload.single("picture"), async (req, res) => {
         }
       );
     }
+
+    const tournament = await Tournament.findById(id);
+
+    res.json(tournament);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+router.put("/updateNoFile/:id", async (req, res) => {
+  const { title, categoryName, categoryId, description, picture } = req.body;
+  const { id } = req.params;
+
+  const date = new Date();
+  const localeDate = date.toLocaleDateString();
+  const localTime = date.toLocaleTimeString();
+
+  try {
+    const tournamentToUpdate = await Tournament.findById(id);
+
+    await Tournament.updateOne(
+      { _id: id },
+      {
+        title: title,
+        categoryName: categoryName,
+        categoryId: categoryId,
+        picture: picture,
+        description: description,
+        date: `le ${localeDate} à ${localTime}`,
+      }
+    );
 
     const tournament = await Tournament.findById(id);
 

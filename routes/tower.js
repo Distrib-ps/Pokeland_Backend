@@ -15,6 +15,29 @@ router.get("/towers", async (req, res) => {
   }
 });
 
+router.post("/addNoFile", async (req, res) => {
+  const { title, description, picture } = req.body;
+
+  const date = new Date();
+  const localeDate = date.toLocaleDateString();
+  const localTime = date.toLocaleTimeString();
+
+  try {
+    const tower = new Tower({
+      title: title,
+      description,
+      picture: picture,
+      date: `le ${localeDate} à ${localTime}`,
+    });
+
+    const newTower = await tower.save();
+
+    res.json(newTower);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
 router.post("/add", upload.single("picture"), async (req, res) => {
   const { title, description } = req.body;
 
@@ -42,6 +65,35 @@ router.post("/add", upload.single("picture"), async (req, res) => {
     const newTower = await tower.save();
 
     res.json(newTower);
+  } catch (err) {
+    res.status(400).json(err);
+  }
+});
+
+router.put("/updateNoFile/:id", async (req, res) => {
+  const { title, description, picture } = req.body;
+  const { id } = req.params;
+
+  const date = new Date();
+  const localeDate = date.toLocaleDateString();
+  const localTime = date.toLocaleTimeString();
+
+  try {
+    const towerToUpdate = await Tournament.findById(id);
+
+    await Tournament.updateOne(
+      { _id: id },
+      {
+        title: title,
+        picture: picture,
+        description: description,
+        date: `le ${localeDate} à ${localTime}`,
+      }
+    );
+
+    const tower = await Tower.findById(id);
+
+    res.json(tower);
   } catch (err) {
     res.status(400).json(err);
   }

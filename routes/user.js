@@ -122,7 +122,7 @@ router.post("/signin/form", async (req, res) => {
 });
 
 router.put("/update/:id", upload.single("file"), async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, picture } = req.body;
   const { id } = req.params;
   const file = req.file;
 
@@ -217,6 +217,7 @@ router.put("/update/:id", upload.single("file"), async (req, res) => {
           pseudo: name,
           email: email,
           role: role,
+          profilePicture: picture,
         }
       );
     }

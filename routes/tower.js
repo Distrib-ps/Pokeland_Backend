@@ -79,9 +79,7 @@ router.put("/updateNoFile/:id", async (req, res) => {
   const localTime = date.toLocaleTimeString();
 
   try {
-    const towerToUpdate = await Tournament.findById(id);
-
-    await Tournament.updateOne(
+    await Tower.updateOne(
       { _id: id },
       {
         title: title,
@@ -148,6 +146,8 @@ router.delete("/delete/:id", async (req, res) => {
 
   try {
     const tower = await Tower.findById(id);
+
+    console.log(tower);
 
     if (tower.picture && !tower.picture.includes("http")) {
       fs.unlink(`./uploads/${tower.picture}`, function (err) {

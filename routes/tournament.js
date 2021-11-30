@@ -150,8 +150,6 @@ router.put("/updateNoFile/:id", async (req, res) => {
   const localTime = date.toLocaleTimeString();
 
   try {
-    const tournamentToUpdate = await Tournament.findById(id);
-
     await Tournament.updateOne(
       { _id: id },
       {

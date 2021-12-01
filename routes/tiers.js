@@ -71,7 +71,7 @@ router.post("/add", async (req, res) => {
 });
 
 router.put("/update/:id", async (req, res) => {
-  const { date, name } = req.body;
+  const { date, name, selectName } = req.body;
   const { id } = req.params;
 
   try {
